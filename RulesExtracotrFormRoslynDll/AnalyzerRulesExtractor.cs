@@ -1,25 +1,29 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace RoslynAnalyzerRulesExtractor
 {
 	public static class AnalyzerRulesExtractor
 	{
-		public static void Main(string[] _) { }
-
 		private static IReadOnlyList<string>? potentialDependencies;
 
-		public static ISet<DiagnosticDescriptor> GetAnalyzerRules(string analyzerAssemblyPath, params string[] dependencies)
+		public static ISet<Type> GetAnalyzerRules(string analyzerAssemblyPath, params string[] dependencies)
 		{
 			potentialDependencies = dependencies;
 			AppDomain.CurrentDomain.AssemblyResolve += ResolveDependency;
 			var analyzerAssembly = Assembly.LoadFrom(analyzerAssemblyPath);
 			AppDomain.CurrentDomain.AssemblyResolve -= ResolveDependency;
+			var types = analyzerAssembly.GetTypes()
+				.Where(IsInstantiatibleDiagnosticAnalzyerByName)
+				.SelectMany(GetFieldAsIEnumerable)
+				.ToList();
 			return analyzerAssembly.GetTypes()
-				.Where(IsInstantiatibleDiagnosticAnalzyer)
-				.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
+				//.Where(IsInstantiatibleDiagnosticAnalzyer)
+				//.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
 				.ToHashSet();
 		}
 
@@ -30,15 +34,69 @@ namespace RoslynAnalyzerRulesExtractor
 			return matchingDependency != null ? Assembly.LoadFrom(matchingDependency) : null;
 		}
 
-		private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
-			=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
+		//private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
+		//	=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
 
-		private static IEnumerable<DiagnosticDescriptor> GetDescriptorFromCreatedAnalyzerInstance(Type type)
+		private static bool IsInstantiatibleDiagnosticAnalzyerByName(Type type)
+			=> InheritsFromClass(type, "DiagnosticAnalyzer") && !type.IsAbstract;
+
+		public static bool InheritsFromClass(Type type, string className)
 		{
-			var analyzer = Activator.CreateInstance(type) as DiagnosticAnalyzer;
-			return analyzer is not null ?
-				(IEnumerable<DiagnosticDescriptor>)analyzer.SupportedDiagnostics
-				: throw new Exception($"{nameof(analyzer)} is null");
+			if (type == null)
+				throw new ArgumentNullException(nameof(type));
+
+			if (string.IsNullOrEmpty(className))
+				throw new ArgumentException("Class name cannot be null or empty.", nameof(className));
+
+			var currentType = type.BaseType;
+			while (currentType != null)
+			{
+				if (currentType.Name == className || currentType.FullName == className)
+					return true;
+				currentType = currentType.BaseType;
+			}
+
+			return false;
+		}
+
+		private static IEnumerable<object> GetDescriptorFromCreatedAnalyzerInstance(Type type)
+		{
+			var analyzer = Activator.CreateInstance(type)/* as DiagnosticAnalyzer*/;
+
+			return null;
+			//return analyzer is not null ?
+			//	(IEnumerable<DiagnosticDescriptor>)analyzer.SupportedDiagnostics
+			//	: throw new Exception($"{nameof(analyzer)} is null");
+		}
+
+		public static IEnumerable<object> GetFieldAsIEnumerable(Type type)
+		{
+			var fieldName = "SupportedDiagnostics";
+			if (type == null)
+			throw new ArgumentNullException(nameof(type));
+
+			if (string.IsNullOrEmpty(fieldName))
+				throw new ArgumentException("Field name cannot be null or empty.", nameof(fieldName));
+
+			// Create an instance of the specified type
+			var instance = Activator.CreateInstance(type);
+
+			// Get the field using reflection
+			var field = type.GetProperty(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			if (field == null)
+				throw new ArgumentException($"Field '{fieldName}' not found in type '{type}'.", nameof(fieldName));
+
+			// Extract the value of the field
+			var fieldValue = field.GetValue(instance);
+
+			// Check if the field value is IEnumerable
+			if (fieldValue is IEnumerable<object> enumerable)
+				return enumerable;
+
+			else
+			{
+				throw new InvalidOperationException($"The field '{fieldName}' is not of type IEnumerable.");
+			}
 		}
 	}
 }
