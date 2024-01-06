@@ -1,0 +1,12 @@
+# This .gitignore file should be placed at the root of your Unity project directory
+#
+# Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
+#
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]in/
+
+# Visual Studio cache directory
+.vs/
+.vsconfig
+.vscode/

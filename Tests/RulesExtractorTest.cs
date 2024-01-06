@@ -1,4 +1,3 @@
-using Microsoft.CodeAnalysis;
 using RoslynAnalyzerRulesExtractor;
 using Tests;
 

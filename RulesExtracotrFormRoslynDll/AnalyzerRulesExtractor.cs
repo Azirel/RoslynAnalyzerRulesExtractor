@@ -4,6 +4,8 @@ using System.Collections;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices.ObjectiveC;
+using System.Collections.Immutable;
+using System.Reflection.Metadata;
 
 namespace RoslynAnalyzerRulesExtractor
 {
@@ -15,16 +17,44 @@ namespace RoslynAnalyzerRulesExtractor
 		{
 			potentialDependencies = dependencies;
 			AppDomain.CurrentDomain.AssemblyResolve += ResolveDependency;
+			LoadMainDependencies();
 			var analyzerAssembly = Assembly.LoadFrom(analyzerAssemblyPath);
 			AppDomain.CurrentDomain.AssemblyResolve -= ResolveDependency;
-			var types = analyzerAssembly.GetTypes()
-				.Where(IsInstantiatibleDiagnosticAnalzyerByName)
-				.SelectMany(GetFieldAsIEnumerable)
+			Type[] types;
+			try
+			{
+				types = analyzerAssembly.GetTypes();
+			}
+			catch (ReflectionTypeLoadException ex)
+			{
+				types = ex.Types.Where(t => t != null).ToArray();
+			}
+			//var types = analyzerAssembly.GetTypes()
+			//	.Where(IsInstantiatibleDiagnosticAnalzyerByName)
+			//	.SelectMany(GetFieldAsIEnumerable)
+			//	.ToList();
+
+			var loadedTypes = types?.Where(IsInstantiatibleDiagnosticAnalzyerByName)
+				//.SelectMany(GetFieldAsIEnumerable)
 				.ToList();
+
 			return analyzerAssembly.GetTypes()
 				//.Where(IsInstantiatibleDiagnosticAnalzyer)
 				//.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
 				.ToHashSet();
+		}
+
+		private static void LoadMainDependencies()
+		{
+			//var dependenciesDirectoryPath = Path.GetFullPath(@"..\..\Dependencies");
+			var dependenciesDirectoryPath = Path.GetFullPath(@"C:\Repos\RulesExtractor\RulesExtracotrFormRoslynDll\Dependencies");
+			var dllPaths = Directory.GetFiles(dependenciesDirectoryPath, @"*.dll");
+			foreach (var dllPath in dllPaths)
+				try { Assembly.LoadFrom(dllPath); }
+				catch (Exception ex)
+				{
+					_ = dllPath;
+				}
 		}
 
 		private static Assembly? ResolveDependency(object? sender, ResolveEventArgs args)
@@ -34,8 +64,8 @@ namespace RoslynAnalyzerRulesExtractor
 			return matchingDependency != null ? Assembly.LoadFrom(matchingDependency) : null;
 		}
 
-		//private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
-		//	=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
+		private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
+			=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
 
 		private static bool IsInstantiatibleDiagnosticAnalzyerByName(Type type)
 			=> InheritsFromClass(type, "DiagnosticAnalyzer") && !type.IsAbstract;
