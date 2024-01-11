@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using Newtonsoft.Json;
 
 namespace Tests
 {
@@ -26,8 +27,11 @@ namespace Tests
 		{
 			var exePath = Path.GetFullPath(Resources.ExtractorExePath);
 			var parameter = Path.GetFullPath(Resources.CodeQualityDllPath);
-			var outputText = StartProcessAndGetOutput(exePath, parameter);
-			Assert.IsFalse(String.IsNullOrEmpty(outputText));
+			var outputJson = StartProcessAndGetOutput(exePath, parameter);
+			Assert.IsFalse(String.IsNullOrEmpty(outputJson));
+			var descriptors = JsonConvert.DeserializeObject<IEnumerable<DiagnosticDescriptorEssentials>>(outputJson);
+			Assert.IsTrue(descriptors?.Any());
+			Assert.IsTrue(descriptors?.Count() == 91);
 		}
 
 		[TestMethod]
@@ -35,8 +39,11 @@ namespace Tests
 		{
 			var exePath = Path.GetFullPath(Resources.ExtractorExePath);
 			var parameter = Path.GetFullPath(Resources.CodeQualityCSharpDllPath);
-			var outputText = StartProcessAndGetOutput(exePath, parameter);
-			Assert.IsFalse(String.IsNullOrEmpty(outputText));
+			var outputJson = StartProcessAndGetOutput(exePath, parameter);
+			Assert.IsFalse(String.IsNullOrEmpty(outputJson));
+			var descriptors = JsonConvert.DeserializeObject<IEnumerable<DiagnosticDescriptorEssentials>>(outputJson);
+			Assert.IsTrue(descriptors?.Any());
+			Assert.IsTrue(descriptors?.Count() == 8);
 		}
 
 		[TestMethod]
@@ -44,8 +51,11 @@ namespace Tests
 		{
 			var exePath = Path.GetFullPath(Resources.ExtractorExePath);
 			var parameter = Path.GetFullPath(Resources.UnityAnalyzersPath);
-			var outputText = StartProcessAndGetOutput(exePath, parameter);
-			Assert.IsFalse(String.IsNullOrEmpty(outputText));
+			var outputJson = StartProcessAndGetOutput(exePath, parameter);
+			Assert.IsFalse(String.IsNullOrEmpty(outputJson));
+			var descriptors = JsonConvert.DeserializeObject<IEnumerable<DiagnosticDescriptorEssentials>>(outputJson);
+			Assert.IsTrue(descriptors?.Any());
+			Assert.IsTrue(descriptors?.Count() == 35);
 		}
 	}
 }

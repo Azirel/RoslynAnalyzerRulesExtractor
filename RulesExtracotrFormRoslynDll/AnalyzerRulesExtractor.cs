@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices.ObjectiveC;
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
-//using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace RoslynAnalyzerRulesExtractor
 {
@@ -65,8 +65,8 @@ namespace RoslynAnalyzerRulesExtractor
 			return matchingDependency != null ? Assembly.LoadFrom(matchingDependency) : null;
 		}
 
-		//private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
-		//	=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
+		private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
+			=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
 
 		private static bool IsInstantiatibleDiagnosticAnalzyerByName(Type type)
 			=> InheritsFromClass(type, "DiagnosticAnalyzer") && !type.IsAbstract;

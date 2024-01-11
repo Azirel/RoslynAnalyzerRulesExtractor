@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 
 [Serializable]
-public struct DiagnosticDescriptorEssentials
+public readonly struct DiagnosticDescriptorEssentials
 {
 	public readonly string Id;
 	public readonly string Title;
