@@ -1,11 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices.ObjectiveC;
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
+//using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace RoslynAnalyzerRulesExtractor
 {
@@ -17,8 +17,9 @@ namespace RoslynAnalyzerRulesExtractor
 		{
 			potentialDependencies = dependencies;
 			AppDomain.CurrentDomain.AssemblyResolve += ResolveDependency;
-			LoadMainDependencies();
-			var analyzerAssembly = Assembly.LoadFrom(analyzerAssemblyPath);
+			//LoadMainDependencies();
+			//Assembly.LoadFile(@"C:\Temp\microsoft.codeanalysis.common.3.3.0\lib\netstandard2.0\Microsoft.CodeAnalysis.dll");
+			var analyzerAssembly = Assembly.LoadFile(analyzerAssemblyPath);
 			AppDomain.CurrentDomain.AssemblyResolve -= ResolveDependency;
 			Type[] types;
 			try
@@ -39,7 +40,7 @@ namespace RoslynAnalyzerRulesExtractor
 				.ToList();
 
 			return analyzerAssembly.GetTypes()
-				//.Where(IsInstantiatibleDiagnosticAnalzyer)
+				.Where(IsInstantiatibleDiagnosticAnalzyer)
 				//.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
 				.ToHashSet();
 		}
@@ -50,7 +51,7 @@ namespace RoslynAnalyzerRulesExtractor
 			var dependenciesDirectoryPath = Path.GetFullPath(@"C:\Repos\RulesExtractor\RulesExtracotrFormRoslynDll\Dependencies");
 			var dllPaths = Directory.GetFiles(dependenciesDirectoryPath, @"*.dll");
 			foreach (var dllPath in dllPaths)
-				try { Assembly.LoadFrom(dllPath); }
+				try { Assembly.LoadFile(dllPath); }
 				catch (Exception ex)
 				{
 					_ = dllPath;

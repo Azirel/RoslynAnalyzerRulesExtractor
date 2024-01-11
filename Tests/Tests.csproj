@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
@@ -17,22 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RulesExtracotrFormRoslynDll\RulesExtracotrFormRoslynDll.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="DllPathsResource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>DllPathsResource.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="DllPathsResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>DllPathsResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Reference Include="RulesExtracotrFormRoslynDll">
+      <HintPath>..\RulesExtracotrFormRoslynDll\bin\Debug\net7.0\RulesExtracotrFormRoslynDll.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

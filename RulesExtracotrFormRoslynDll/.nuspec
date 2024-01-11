@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>RulesExtractor</id>
+    <version>1.0.0</version>
+    <authors>Andrey</authors>
+    <owners>Andrey</owners>
+    <license type="expression">MIT</license> <!-- Or your license type -->
+    <projectUrl></projectUrl>
+    <iconUrl></iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A short description of your package</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <tags>tag1 tag2 tag3</tags>
+    <dependencies>
+      <!-- List your dependencies here -->
+    </dependencies>
+  </metadata>
+</package>

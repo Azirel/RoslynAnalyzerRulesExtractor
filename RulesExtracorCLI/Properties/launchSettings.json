@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RulesExtracorCLI": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Repos\\RulesExtractor\\Microsoft.CodeQuality.Analyzers.dll\""
+    }
+  }
+}
