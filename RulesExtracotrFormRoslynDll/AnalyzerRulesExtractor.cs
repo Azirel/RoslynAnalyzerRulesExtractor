@@ -65,8 +65,8 @@ namespace RoslynAnalyzerRulesExtractor
 			return matchingDependency != null ? Assembly.LoadFrom(matchingDependency) : null;
 		}
 
-		private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
-			=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
+		//private static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
+		//	=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
 
 		private static bool IsInstantiatibleDiagnosticAnalzyerByName(Type type)
 			=> InheritsFromClass(type, "DiagnosticAnalyzer") && !type.IsAbstract;

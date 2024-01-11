@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Reflection;
+using Newtonsoft.Json;
 
 if (args is null || args.Length == 0)
 	throw new ArgumentNullException("No file path specified");
@@ -18,10 +19,16 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 var descriptors = analyzerAssembly.GetTypes()
 				.Where(IsInstantiatibleDiagnosticAnalzyer)
 				.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
-				.ToHashSet();
+				.Select(diagnosticDescriptor => (DiagnosticDescriptorEssentials)diagnosticDescriptor)
+				.GroupBy(descriptor => descriptor.Id)
+				.Select(group => DiagnosticDescriptorEssentials.Merge(group))
+				.OrderBy(item => item.Id)
+				.ToList();
 
-foreach (var group in descriptors.Where(descriptor => !String.IsNullOrEmpty(descriptor.Description.ToString())).GroupBy(descriptor => descriptor))
-	Console.WriteLine($"{group.Key.Id} : {String.Concat(group.Select(descriptor => descriptor.Description))}");
+var resultJson = JsonConvert.SerializeObject(descriptors, Formatting.Indented);
+Console.Out.Write(resultJson);
+
+Console.Out.Flush();
 
 static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
 			=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;
