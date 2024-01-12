@@ -17,13 +17,13 @@ var analyzerAssembly = Assembly.LoadFrom(dllPath);
 
 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 var descriptors = analyzerAssembly.GetTypes()
-				.Where(IsInstantiatibleDiagnosticAnalzyer)
-				.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
-				.Select(diagnosticDescriptor => (DiagnosticDescriptorEssentials)diagnosticDescriptor)
-				.GroupBy(descriptor => descriptor.Id)
-				.Select(group => DiagnosticDescriptorEssentials.Merge(group))
-				.OrderBy(item => item.Id)
-				.ToList();
+	.Where(IsInstantiatibleDiagnosticAnalzyer)
+	.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
+	.Select(diagnosticDescriptor => (DiagnosticDescriptorEssentials)diagnosticDescriptor)
+	.GroupBy(descriptor => descriptor.Id)
+	.Select(group => DiagnosticDescriptorEssentials.Merge(group))
+	.OrderBy(item => item.Id)
+	.ToList();
 
 var resultJson = JsonConvert.SerializeObject(descriptors, Formatting.Indented);
 Console.Out.Write(resultJson);

@@ -57,5 +57,39 @@ namespace Tests
 			Assert.IsTrue(descriptors?.Any());
 			Assert.IsTrue(descriptors?.Count() == 35);
 		}
+
+		//[TestMethod]
+		//public void PublishedExeTest()
+		//{
+		//	var exePath = Path.GetFullPath(Resources.ReleasePath);
+		//	var parameter = Path.GetFullPath(Resources.UnityAnalyzersPath);
+		//	var outputJson = StartProcessAndGetOutput(exePath, parameter);
+		//	Assert.IsFalse(String.IsNullOrEmpty(outputJson));
+		//	var descriptors = JsonConvert.DeserializeObject<IEnumerable<DiagnosticDescriptorEssentials>>(outputJson);
+		//	Assert.IsTrue(descriptors?.Any());
+		//	Assert.IsTrue(descriptors?.Count() == 35);
+		//}
+
+		[TestMethod]
+		public void MaroonTest()
+		{
+			var exePath = Path.GetFullPath(Resources.ExtractorExePath);
+			var parameter = Path.GetFullPath(Resources.MaroontressOxbind);
+			var outputJson = StartProcessAndGetOutput(exePath, parameter);
+			Assert.IsFalse(String.IsNullOrEmpty(outputJson));
+			var descriptors = JsonConvert.DeserializeObject<IEnumerable<DiagnosticDescriptorEssentials>>(outputJson);
+			Assert.IsTrue(descriptors?.Any());
+		}
+
+		[TestMethod]
+		public void CodeStyle()
+		{
+			var exePath = Path.GetFullPath(Resources.ExtractorExePath);
+			var parameter = Path.GetFullPath(Resources.CodeStyle);
+			var outputJson = StartProcessAndGetOutput(exePath, parameter);
+			Assert.IsFalse(String.IsNullOrEmpty(outputJson));
+			var descriptors = JsonConvert.DeserializeObject<IEnumerable<DiagnosticDescriptorEssentials>>(outputJson);
+			Assert.IsTrue(descriptors?.Any());
+		}
 	}
 }

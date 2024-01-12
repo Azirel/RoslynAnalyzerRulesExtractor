@@ -123,8 +123,17 @@
   <data name="CodeQualityDllPath" xml:space="preserve">
     <value>..\..\..\CodeQulityAnalyzerTestDlls\Microsoft.CodeQuality.Analyzers.dll</value>
   </data>
+  <data name="CodeStyle" xml:space="preserve">
+    <value>..\..\..CodeStyle\Microsoft.CodeAnalysis.CodeStyle.dll</value>
+  </data>
   <data name="ExtractorExePath" xml:space="preserve">
     <value>..\..\..\..\RulesExtracorCLI\bin\Debug\net6.0\RulesExtracorCLI.exe</value>
+  </data>
+  <data name="MaroontressOxbind" xml:space="preserve">
+    <value>..\..\..\MaroontressOxbind\Maroontress.Oxbind.dll</value>
+  </data>
+  <data name="ReleasePath" xml:space="preserve">
+    <value>C:\Temp\ReleaseAttempts\RulesExtracorCLI.exe</value>
   </data>
   <data name="UnityAnalyzersPath" xml:space="preserve">
     <value>..\..\..\UnityAnalyzerTestDlls\Microsoft.Unity.Analyzers.dll</value>

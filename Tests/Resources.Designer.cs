@@ -79,11 +79,38 @@ namespace Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ..\..\..CodeStyle\Microsoft.CodeAnalysis.CodeStyle.dll.
+        /// </summary>
+        internal static string CodeStyle {
+            get {
+                return ResourceManager.GetString("CodeStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ..\..\..\..\RulesExtracorCLI\bin\Debug\net6.0\RulesExtracorCLI.exe.
         /// </summary>
         internal static string ExtractorExePath {
             get {
                 return ResourceManager.GetString("ExtractorExePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ..\..\..\MaroontressOxbind\Maroontress.Oxbind.dll.
+        /// </summary>
+        internal static string MaroontressOxbind {
+            get {
+                return ResourceManager.GetString("MaroontressOxbind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C:\Temp\ReleaseAttempts\RulesExtracorCLI.exe.
+        /// </summary>
+        internal static string ReleasePath {
+            get {
+                return ResourceManager.GetString("ReleasePath", resourceCulture);
             }
         }
         
