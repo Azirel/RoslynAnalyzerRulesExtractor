@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using System.Reflection;
 using Newtonsoft.Json;
 
-if (args is null || args.Length == 0)
+if (args?.Any() == false)
 	throw new ArgumentNullException("No file path specified");
 
 var dllPath = args[0];
@@ -25,10 +25,21 @@ var descriptors = analyzerAssembly.GetTypes()
 	.OrderBy(item => item.Id)
 	.ToList();
 
-var resultJson = JsonConvert.SerializeObject(descriptors, Formatting.Indented);
-Console.Out.Write(resultJson);
+if ((descriptors is not null) && descriptors.Any())
+	Serialize(descriptors, Console.OpenStandardOutput());
 
-Console.Out.Flush();
+//var resultJson = JsonConvert.SerializeObject(descriptors, Formatting.Indented);
+//Console.Out.Write(resultJson);
+//Console.Out.Flush();
+
+static void Serialize(object value, Stream s)
+{
+	using var writer = new StreamWriter(s);
+	using var jsonWriter = new JsonTextWriter(writer);
+	var ser = new JsonSerializer();
+	ser.Serialize(jsonWriter, value);
+	jsonWriter.Flush();
+}
 
 static bool IsInstantiatibleDiagnosticAnalzyer(Type type)
 			=> type.IsSubclassOf(typeof(DiagnosticAnalyzer)) && !type.IsAbstract;

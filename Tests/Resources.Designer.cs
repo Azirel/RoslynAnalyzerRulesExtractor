@@ -88,7 +88,7 @@ namespace Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ..\..\..\..\RulesExtracorCLI\bin\Debug\net6.0\RulesExtracorCLI.exe.
+        ///   Looks up a localized string similar to ..\..\..\..\RulesExtracorCLI\bin\Release\net6.0\RulesExtracorCLI.exe.
         /// </summary>
         internal static string ExtractorExePath {
             get {

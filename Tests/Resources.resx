@@ -127,7 +127,7 @@
     <value>..\..\..CodeStyle\Microsoft.CodeAnalysis.CodeStyle.dll</value>
   </data>
   <data name="ExtractorExePath" xml:space="preserve">
-    <value>..\..\..\..\RulesExtracorCLI\bin\Debug\net6.0\RulesExtracorCLI.exe</value>
+    <value>..\..\..\..\RulesExtracorCLI\bin\Debug\net6.0\win10-x64\RulesExtracorCLI.exe</value>
   </data>
   <data name="MaroontressOxbind" xml:space="preserve">
     <value>..\..\..\MaroontressOxbind\Maroontress.Oxbind.dll</value>
