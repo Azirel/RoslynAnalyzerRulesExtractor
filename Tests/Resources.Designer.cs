@@ -61,6 +61,15 @@ namespace Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ..\..\..\FullDependencies.
+        /// </summary>
+        internal static string AnalyzerDependenciesDirectoryPath {
+            get {
+                return ResourceManager.GetString("AnalyzerDependenciesDirectoryPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ..\..\..\CodeQulityAnalyzerTestDlls\Microsoft.CodeQuality.CSharp.Analyzers.dll.
         /// </summary>
         internal static string CodeQualityCSharpDllPath {
@@ -79,7 +88,7 @@ namespace Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ..\..\..CodeStyle\Microsoft.CodeAnalysis.CodeStyle.dll.
+        ///   Looks up a localized string similar to ..\..\..\CodeStyle\Microsoft.CodeAnalysis.CodeStyle.dll.
         /// </summary>
         internal static string CodeStyle {
             get {
@@ -102,6 +111,15 @@ namespace Tests {
         internal static string MaroontressOxbind {
             get {
                 return ResourceManager.GetString("MaroontressOxbind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ..\..\..\MeziantouDlls\Meziantou.Analyzer.dll.
+        /// </summary>
+        internal static string Meziantou {
+            get {
+                return ResourceManager.GetString("Meziantou", resourceCulture);
             }
         }
         
