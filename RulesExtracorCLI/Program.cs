@@ -6,31 +6,26 @@ using Newtonsoft.Json;
 if (args?.Any() == false)
 	throw new ArgumentNullException("No file path specified");
 
-var dllPath = args[0];
+var dllPath = args?[0];
 if (!File.Exists(dllPath))
 	throw new FileNotFoundException(dllPath);
 
-foreach (var dependencyPath in args.Skip(1))
+foreach (var dependencyPath in args?.Skip(1))
 	Assembly.LoadFrom(dependencyPath);
 
 var analyzerAssembly = Assembly.LoadFrom(dllPath);
 
-var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 var descriptors = analyzerAssembly.GetTypes()
 	.Where(IsInstantiatibleDiagnosticAnalzyer)
 	.SelectMany(GetDescriptorFromCreatedAnalyzerInstance)
 	.Select(diagnosticDescriptor => (DiagnosticDescriptorEssentials)diagnosticDescriptor)
 	.GroupBy(descriptor => descriptor.Id)
-	.Select(group => DiagnosticDescriptorEssentials.Merge(group))
+	.Select(DiagnosticDescriptorEssentials.Merge)
 	.OrderBy(item => item.Id)
 	.ToList();
 
 if ((descriptors is not null) && descriptors.Any())
 	Serialize(descriptors, Console.OpenStandardOutput());
-
-//var resultJson = JsonConvert.SerializeObject(descriptors, Formatting.Indented);
-//Console.Out.Write(resultJson);
-//Console.Out.Flush();
 
 static void Serialize(object value, Stream s)
 {
