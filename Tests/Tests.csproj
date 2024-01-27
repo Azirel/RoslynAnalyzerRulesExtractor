@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RulesExtractorAsLibrary\RulesExtractorAsLibrary.csproj" />
+    <Reference Include="RulesExtractorAsLibrary">
+      <HintPath>..\RulesExtractorAsLibrary\bin\Debug\netstandard2.1.0\RulesExtractorAsLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [Serializable]
 public readonly struct DiagnosticDescriptorEssentials
@@ -34,9 +36,11 @@ public readonly struct DiagnosticDescriptorEssentials
 		if (!descriptors.Any())
 			throw new ArgumentException("");
 		var first = descriptors.First();
-		return new(descriptors.Key, first.Title, JoinDescriptions(descriptors), first.HelpLinkUri, first.Category);
+		return new DiagnosticDescriptorEssentials(descriptors.Key, first.Title, JoinDescriptions(descriptors), first.HelpLinkUri, first.Category);
 	}
 
 	private static string JoinDescriptions(IEnumerable<DiagnosticDescriptorEssentials> descriptions)
-		=> String.Join('\n', descriptions.Select(descriptor => descriptor.Description));
+	{
+		return String.Join("\n", descriptions.Select(descriptor => descriptor.Description));
+	}
 }

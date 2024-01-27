@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -6,9 +9,9 @@ namespace RulesExtractorAsLibrary
 {
 	public static class RulesExtractor
 	{
-		private static Type? diagnosticType;
+		private static Type diagnosticType;
 		private const string DiagnosticTypeName = "Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer";
-		private static string? dependenciesPath;
+		private static string dependenciesPath;
 
 		public static IEnumerable<DiagnosticDescriptorEssentials> Extract(string mainAnalyzerAssemblyPath, string dependenciesPath)
 		{
@@ -19,7 +22,7 @@ namespace RulesExtractorAsLibrary
 			diagnosticType = Array
 				.Find(types, type => IsSubClassOf(type, DiagnosticTypeName))?
 				.BaseType;
-			return diagnosticType is not null
+			return (!(diagnosticType is null))
 				? mainAssembly.GetTypes()
 						.Where(IsDiagnosticAnalyzer)
 						.SelectMany(GetDescriptorsFromAnalyzerType)
@@ -31,16 +34,16 @@ namespace RulesExtractorAsLibrary
 				: Enumerable.Empty<DiagnosticDescriptorEssentials>();
 		}
 
-		public static IEnumerable<dynamic>? GetDescriptorsFromAnalyzerType(Type type)
+		public static IEnumerable<dynamic> GetDescriptorsFromAnalyzerType(Type type)
 		{
-			dynamic analyzerInstance = Activator.CreateInstance(type)!;
-			return analyzerInstance is not null ? (analyzerInstance.SupportedDiagnostics as IEnumerable<dynamic>) : throw new Exception($"{nameof(analyzerInstance)} is null");
+			dynamic analyzerInstance = Activator.CreateInstance(type);
+			return !(analyzerInstance is null) ? (analyzerInstance.SupportedDiagnostics as IEnumerable<dynamic>) : throw new Exception($"{nameof(analyzerInstance)} is null");
 		}
 
 		private static bool IsDiagnosticAnalyzer(Type type)
-			=> type?.IsSubclassOf(diagnosticType!) == true && !type.IsAbstract;
+			=> type?.IsSubclassOf(diagnosticType) == true && !type.IsAbstract;
 
-		private static Assembly? ResolveAssembly(object? sender, ResolveEventArgs args)
+		private static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
 		{
 			const string dependencyNamePattern = "^([^,]+)";
 			var dependencyName = Regex.Match(args.Name, dependencyNamePattern).Value;
@@ -48,7 +51,7 @@ namespace RulesExtractorAsLibrary
 			return !String.IsNullOrEmpty(assemblyPath) ? Assembly.LoadFrom(assemblyPath) : null;
 		}
 
-		private static bool IsSubClassOf(Type mainType, string targetClassFullName) => mainType?.BaseType is not null
+		private static bool IsSubClassOf(Type mainType, string targetClassFullName) => !(mainType?.BaseType is null)
 		&& ((mainType.BaseType.FullName == targetClassFullName
 						&& !mainType.IsAbstract)
 			|| IsSubClassOf(mainType.BaseType, targetClassFullName));

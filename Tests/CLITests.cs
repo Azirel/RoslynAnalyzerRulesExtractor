@@ -96,7 +96,7 @@ namespace Tests
 		[TestMethod]
 		public void TestExtraction()
 		{
-			RulesExtractor.Extract(Path.GetFullPath(Resources.Meziantou), Resources.AnalyzerDependenciesDirectoryPath);
+			var testResult = RulesExtractor.Extract(Path.GetFullPath(Resources.UnityAnalyzersPath), Resources.AnalyzerDependenciesDirectoryPath);
 		}
 	}
 }
