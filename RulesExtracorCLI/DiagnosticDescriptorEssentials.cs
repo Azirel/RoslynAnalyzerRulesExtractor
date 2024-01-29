@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Text;
 
 [Serializable]
 public readonly struct DiagnosticDescriptorEssentials
@@ -32,5 +33,10 @@ public readonly struct DiagnosticDescriptorEssentials
 	}
 
 	private static string JoinDescriptions(IEnumerable<DiagnosticDescriptorEssentials> descriptions)
-		=> String.Join('\n', descriptions.Select(descriptor => descriptor.Description));
+	{
+		var stringBuilder = new StringBuilder();
+		descriptions.Select(descriptor => descriptor.Description)
+		.Distinct().ToList().ForEach(@string => stringBuilder.Append(@string));
+		return stringBuilder.ToString();
+	}
 }

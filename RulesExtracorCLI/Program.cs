@@ -22,6 +22,8 @@ var descriptors = analyzerAssembly.GetTypes()
 	.GroupBy(descriptor => descriptor.Id)
 	.Select(DiagnosticDescriptorEssentials.Merge)
 	.OrderBy(item => item.Id)
+	.Where(descriptor => !String.IsNullOrEmpty(descriptor.Title))
+	.OrderBy(item => item.Id)
 	.ToList();
 
 if ((descriptors is not null) && descriptors.Any())
